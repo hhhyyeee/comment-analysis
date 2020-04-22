@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 
 def symmetrize(a):
-    """Get a square matrix and return its symmetric matrix"""
+    """Get a square matrix and return its decalcomanie"""
     return a + a.T - np.diag(a.diagonal())
 
 
