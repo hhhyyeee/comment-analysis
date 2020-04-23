@@ -9,7 +9,7 @@ class SentenceExtraction:
         self.sentences_origin = pd.read_csv(self.sentence_tokenized_file)[column_name]
 
         # 센텐스 개수 조절
-        self.sentences = self.sentences_origin[0:100].tolist()
+        self.sentences = self.sentences_origin[1000:1100].tolist()
 
         self.sentences_size = len(self.sentences)
 
@@ -36,12 +36,11 @@ class SentenceExtraction:
         """Make similarity matrix for all sentences"""
         g = np.zeros((self.sentences_size, self.sentences_size), dtype='float')
 
-        for i in range(1, self.sentences_size):  # 1부터 N-1 까지; (i, i) 성분은 0으로 세팅
+        for i in range(1, self.sentences_size):  # 1부터 N-1 까지; (i, i) 성분은 0으로 세팅 (?)
             sent1 = self.sentences[i]
             for j in range(i + 1, self.sentences_size):
                 sent2 = self.sentences[j]
                 g[i][j] = self.similarity(sent1, sent2)
-
         return g
 
     def get_most_important(self, g):
@@ -73,5 +72,5 @@ class SentenceExtraction:
             print("length: ", len(sentence), '\n')
 
 
-glowpick_analysis = SentenceExtraction(3, 'comments')
+glowpick_analysis = SentenceExtraction(5, 'comments')
 glowpick_analysis.analyze()

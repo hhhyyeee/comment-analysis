@@ -11,8 +11,8 @@ def symmetrize(a):
 class KeywordExtraction:
     """Main function to extract keywords"""
 
-    def __init__(self):
-        self.window_size = 7
+    def __init__(self, window_size=7):
+        self.window_size = window_size # default 7
         self.d = 0.85
         self.min_diff = 1e-5
         self.steps = 10
@@ -32,6 +32,7 @@ class KeywordExtraction:
         return comments_list, tokens_comments_list
 
     def get_token_pairs(self, comment):
+        # 적절한 윈도우 사이즈 평가 기준을 도입하고 평가시 차선책을 선택
         """Build token pairs per sentence with certain window size"""
         token_pairs = list()
         for i, word in enumerate(comment):
@@ -103,3 +104,5 @@ class KeywordExtraction:
             node_weight[word] = pr[index]
 
         self.node_weight = node_weight
+
+# 단어 자체가 가지는 weight 가 중요한거니까 그냥 힘센 단어를 골라서 이상적인 댓글 조합 (단어의 순서는 별로 중요하지 않음)
