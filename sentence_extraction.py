@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 class SentenceExtraction:
-    """Get important sentences from text"""
+    """Get important sentences from text by TextRank"""
 
     def __init__(self, sentences_number, column_name):
         self.sentence_tokenized_file = 'csv/comments_revamped_list_20200420.csv'
@@ -18,7 +18,8 @@ class SentenceExtraction:
         self.g = None
         self.important_sentences = None
 
-    def similarity(self, sent1, sent2):
+    @staticmethod
+    def similarity(sent1, sent2):
         """Calculate similarity between two sentences"""
         similarity = 0
         sent1_tokens = sent1.split()
@@ -68,9 +69,9 @@ class SentenceExtraction:
         self.important_sentences = important_sentences
 
         for sentence in important_sentences:
-            print("sentence: ", sentence, '\n')
-            print("length: ", len(sentence))
+            print("sentence: ", sentence)
+            print("length: ", len(sentence), '\n')
 
 
 glowpick_analysis = SentenceExtraction(3, 'comments')
-glowpick_sentences_extracted = glowpick_analysis.analyze()
+glowpick_analysis.analyze()
