@@ -66,7 +66,7 @@ class GlowpickCommentTokenizer:
 
         # Convert the string into DataFrame, and export it as a csv file
         df = pd.DataFrame(comment_list_fixed, columns=['comments'])
-        df.to_csv("csv/comments_revamped_list_20200426.csv", index=False)
+        df.to_csv("csv/eval_test_tokenized.csv", index=False)
 
         return comment_list_fixed
 
@@ -74,10 +74,15 @@ class GlowpickCommentTokenizer:
 comments = list()
 keywords = list()
 
-with open('csv/comments_20200406.csv', newline='') as csvfile:
+# with open('csv/comments_20200406.csv', newline='') as csvfile:
+#     reader = csv.reader(csvfile, delimiter='|')
+#     for row in reader:
+#         comments.append(row[3])
+
+with open('csv/eval_test.csv', newline='') as csvfile:
     reader = csv.reader(csvfile, delimiter='|')
     for row in reader:
-        comments.append(row[3])
+        comments.append(row[0])
 
 with open('csv/tokenize_keywords.csv', newline='') as csvfile:
     reader = csv.reader(csvfile)

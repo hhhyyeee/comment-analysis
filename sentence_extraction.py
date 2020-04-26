@@ -5,7 +5,7 @@ class SentenceExtraction:
     """Get important sentences from text by TextRank"""
 
     def __init__(self, sentences_number, column_name):
-        self.sentence_tokenized_file = 'csv/comments_revamped_list_20200425.csv'
+        self.sentence_tokenized_file = 'csv/comments_revamped_list_20200426.csv'
         self.sentences_origin = pd.read_csv(self.sentence_tokenized_file)[column_name]
 
         # 센텐스 개수 조절
