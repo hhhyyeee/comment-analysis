@@ -104,5 +104,7 @@ class KeywordExtraction:
             node_weight[word] = pr[index]
 
         self.node_weight = node_weight
+        return node_weight
 
-# 단어 자체가 가지는 weight 가 중요한거니까 그냥 힘센 단어를 골라서 이상적인 댓글 조합 (단어의 순서는 별로 중요하지 않음)
+
+keywordExtractor = KeywordExtraction()

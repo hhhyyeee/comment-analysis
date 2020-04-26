@@ -1,37 +1,24 @@
+import pandas as pd
 import re
 import csv
 from konlpy.tag import Okt
 
 
-def csvread_list(file_loc):
-    raw_list = list()
-    with open(file_loc, newline='') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            raw_list.append(row[0])
-    return raw_list
-
-
 class GlowpickCommentTokenizer:
     """Tokenize Comments from Glowpick"""
 
-    def __init__(self):
-        self.comment_file = 'csv/comments_20200406.csv'
-        self.keyword_file = 'csv/tokenize_keywords.csv'
-        self.raw_comment_list = csvread_list(self.comment_file)
-        self.keyword_list = csvread_list(self.keyword_file)
+    @staticmethod
+    def test_tokenize(sentence):
+        return print(Okt().pos(sentence))
+
+    def __init__(self, comment_list, keyword_list):
+        self.comment_list = comment_list
+        self.keyword_list = keyword_list
         self.exclude_classes = ['Josa', 'Exclamation', 'Suffix', 'Determiner', 'Conjunction', 'PreEomi']
 
-    def get_comments_only(self):
-        comment_list = list()
-        for row in self.raw_comment_list:
-            row_1 = row.split("|")
-            comment_list.append(row_1[3])
-        return comment_list
-
-    def replace_comments_with_keywords(self, comment_list):
+    def replace_comments_with_keywords(self):
         comment_list_replaced = list()
-        for sentence in comment_list:
+        for sentence in self.comment_list:
             sentence = ' '.join(re.compile('[가-힣]+').findall(sentence))
             for word in self.keyword_list:
                 sentence = sentence.replace(word, str(self.keyword_list.index(word)))
@@ -68,11 +55,8 @@ class GlowpickCommentTokenizer:
     def tokenize(self):
         """Main function to tokenize multiple comments"""
 
-        # Get only comments from csv file
-        comment_list = self.get_comments_only()
-
         # Replace words in comments with keywords
-        comment_list_replaced = self.replace_comments_with_keywords(comment_list)
+        comment_list_replaced = self.replace_comments_with_keywords()
 
         # Tokenize remnants with konlpy Okt tokenizer
         comment_list_tokenized = self.tokenize_comments(comment_list_replaced)
@@ -80,10 +64,26 @@ class GlowpickCommentTokenizer:
         # Fix comments by re-replacing keywords
         comment_list_fixed = self.fix_comments(comment_list_tokenized)
 
+        # Convert the string into DataFrame, and export it as a csv file
+        df = pd.DataFrame(comment_list_fixed, columns=['comments'])
+        df.to_csv("csv/comments_revamped_list_20200426.csv", index=False)
+
         return comment_list_fixed
 
 
-glowpick_comments = GlowpickCommentTokenizer()
-glowpick_comments_tokenized = glowpick_comments.tokenize()
+comments = list()
+keywords = list()
 
-print(glowpick_comments_tokenized[0:20])
+with open('csv/comments_20200406.csv', newline='') as csvfile:
+    reader = csv.reader(csvfile, delimiter='|')
+    for row in reader:
+        comments.append(row[3])
+
+with open('csv/tokenize_keywords.csv', newline='') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        keywords.append(row[0])
+
+
+model = GlowpickCommentTokenizer(comments, keywords)
+model.tokenize()
