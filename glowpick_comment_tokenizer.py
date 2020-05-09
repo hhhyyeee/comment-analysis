@@ -45,6 +45,11 @@ class GlowpickCommentTokenizer:
                         comm.append(self.keyword_list[num])
                     except:
                         print(token[0], ', ', token[1])
+
+                # 동사, 형용사, 부사에 한해 첫 두 글자만 사용
+                elif token[1] in ['Verb', 'Adjective', 'Adverb']:
+                    comm.append(token[0][:2])
+
                 else:
                     if token[1] not in self.exclude_classes:
                         comm.append(token[0])
@@ -71,24 +76,24 @@ class GlowpickCommentTokenizer:
         return comment_list_fixed
 
 
-comments = list()
-keywords = list()
+# comments = list()
+# keywords = list()
 
 # with open('csv/comments_20200406.csv', newline='') as csvfile:
 #     reader = csv.reader(csvfile, delimiter='|')
 #     for row in reader:
 #         comments.append(row[3])
 
-with open('csv/eval_test.csv', newline='') as csvfile:
-    reader = csv.reader(csvfile, delimiter='|')
-    for row in reader:
-        comments.append(row[0])
+# with open('csv/glowpick_comments_final.csv', newline='') as csvfile:
+#     reader = csv.reader(csvfile, delimiter='|')
+#     for row in reader:
+#         comments.append(row[0])
+#
+# with open('csv/tokenize_keywords.csv', newline='') as csvfile:
+#     reader = csv.reader(csvfile)
+#     for row in reader:
+#         keywords.append(row[0])
 
-with open('csv/tokenize_keywords.csv', newline='') as csvfile:
-    reader = csv.reader(csvfile)
-    for row in reader:
-        keywords.append(row[0])
-
-
-model = GlowpickCommentTokenizer(comments, keywords)
-model.tokenize()
+#
+# model = GlowpickCommentTokenizer(comments[:2], keywords)
+# model.tokenize()
